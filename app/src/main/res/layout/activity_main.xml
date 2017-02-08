@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginRight="16dp"
+    android:layout_marginLeft="16dp"
+    android:orientation="vertical"
+    tools:context="com.fan.map.demo.MainActivity">
+
+    <Button
+        android:id="@+id/gps"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="GPS" />
+
+    <Button
+        android:id="@+id/baidu"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="百度" />
+    <Button
+        android:id="@+id/tecent"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="腾讯" />
+    <Button
+        android:id="@+id/gaode"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="高得" />
+    <TextView
+        android:id="@+id/gps_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1123"
+        android:layout_marginTop="16dp"
+        />
+</LinearLayout>
