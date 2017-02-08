@@ -22,6 +22,9 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    packagingOptions {
+        exclude 'assets/infowindow_bg.9.png'
+    }
 }
 
 dependencies {

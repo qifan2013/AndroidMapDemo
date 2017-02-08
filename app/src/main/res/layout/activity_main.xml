@@ -7,6 +7,7 @@
     android:layout_marginRight="16dp"
     android:layout_marginLeft="16dp"
     android:orientation="vertical"
+    android:gravity="center_vertical"
     tools:context="com.fan.map.demo.MainActivity">
 
     <Button
@@ -15,7 +16,8 @@
         android:layout_height="80dp"
         android:gravity="center"
         android:layout_marginTop="16dp"
-        android:text="GPS" />
+        android:text="GPS"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/baidu"
@@ -37,12 +39,20 @@
         android:layout_height="80dp"
         android:gravity="center"
         android:layout_marginTop="16dp"
-        android:text="高得" />
+        android:text="高得2D" />
+    <Button
+        android:id="@+id/gaode3d"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:text="高得3D" />
     <TextView
         android:id="@+id/gps_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="1123"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         />
 </LinearLayout>

@@ -2,4 +2,8 @@
     <string name="app_name">AndroidMapDemo</string>
     <string name="startlocation">开始定位</string>
     <string name="stoplocation">停止定位</string>
+    <string name="location">正在定位中</string>
+    <string name="gpsfollow">追随</string>
+    <string name="gpslocate">定位</string>
+    <string name="gpsrotate">旋转</string>
 </resources>
