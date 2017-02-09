@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 
+import com.fan.map.demo.ImageUtils;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
 import com.tencent.map.geolocation.TencentLocationManager;
@@ -25,7 +26,7 @@ import com.tencent.tencentmap.mapsdk.map.MapView;
 import com.tencent.tencentmap.mapsdk.map.TencentMap;
 import com.fan.map.demo.R;
 
-public class ShowMyLocationActivity extends MapActivity implements
+public class Tmap2DActivity extends MapActivity implements
 		TencentLocationListener, SensorEventListener {
 	private ImageButton btnShowLocation;
 	private SensorManager sensorManager;
@@ -42,7 +43,7 @@ public class ShowMyLocationActivity extends MapActivity implements
 	protected void onCreate(Bundle arg0) {
 		// TODO Auto-generated method stub
 		super.onCreate(arg0);
-		setContentView(R.layout.activity_show_location);
+		setContentView(R.layout.activity_tmap2d);
 		init();
 		bindListener();
 	}
@@ -72,7 +73,7 @@ public class ShowMyLocationActivity extends MapActivity implements
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				int error = locationManager.requestLocationUpdates(
-						locationRequest,ShowMyLocationActivity.this);
+						locationRequest,Tmap2DActivity.this);
 				switch (error) {
 				case 0:
 					Log.e("location", "成功注册监听器");
@@ -90,7 +91,7 @@ public class ShowMyLocationActivity extends MapActivity implements
 				default:
 					break;
 				}
-				sensorManager.registerListener(ShowMyLocationActivity.this, 
+				sensorManager.registerListener(Tmap2DActivity.this,
 						oritationSensor, SensorManager.SENSOR_DELAY_NORMAL);
 			}
 		});
@@ -101,11 +102,17 @@ public class ShowMyLocationActivity extends MapActivity implements
 		// TODO Auto-generated method stub
 		if (arg1 == TencentLocation.ERROR_OK) {
 			LatLng latLng = new LatLng(arg0.getLatitude(), arg0.getLongitude());
+			LatLng latLng1 = new LatLng(arg0.getLatitude()+0.001, arg0.getLongitude());
+			LatLng latLng2 = new LatLng(arg0.getLatitude(), arg0.getLongitude()+0.001);
 			if (myLocation == null) {
 				myLocation = tencentMap.addMarker(new MarkerOptions().
 						position(latLng).
-						icon(BitmapDescriptorFactory.fromResource(R.mipmap.navigation)).
+						icon(BitmapDescriptorFactory.fromResource(R.drawable.gps_point)).
 						anchor(0.5f, 0.5f));
+				tencentMap.addMarker(new MarkerOptions().position(latLng1).icon(BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar1)))));
+				tencentMap.addMarker(new MarkerOptions().position(latLng2).icon(BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar2)))));
+
+
 			}
 			if (accuracy == null) {
 				accuracy = tencentMap.addCircle(new CircleOptions().

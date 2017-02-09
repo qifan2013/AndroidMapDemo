@@ -20,13 +20,16 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.fan.map.demo.ImageUtils;
 import com.fan.map.demo.R;
 
 /**
  * AMapV2地图中介绍自定义定位小蓝点
  */
-public class CustomLocationActivity extends Activity implements LocationSource,
+public class Amap3DActivity extends Activity implements LocationSource,
 		AMapLocationListener {
 	private AMap aMap;
 	private MapView mapView;
@@ -43,7 +46,7 @@ public class CustomLocationActivity extends Activity implements LocationSource,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
-		setContentView(R.layout.locationmodesource_activity);
+		setContentView(R.layout.activity_amap3d);
 		mapView = (MapView) findViewById(R.id.map);
 		mapView.onCreate(savedInstanceState);// 此方法必须重写
 		init();
@@ -144,6 +147,13 @@ public class CustomLocationActivity extends Activity implements LocationSource,
 				mLocationErrText.setVisibility(View.GONE);
 				mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
 				aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+
+				LatLng latLng = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
+				LatLng latLng1 = new LatLng(amapLocation.getLatitude()+0.001, amapLocation.getLongitude());
+				LatLng latLng2 = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()+0.001);
+				aMap.addMarker(new MarkerOptions().position(latLng1).icon(BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar1)))));
+				aMap.addMarker(new MarkerOptions().position(latLng2).icon(BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar2)))));
+
 			} else {
 				String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
 				Log.e("AmapErr",errText);
@@ -189,5 +199,5 @@ public class CustomLocationActivity extends Activity implements LocationSource,
 		mlocationClient = null;
 	}
 
-	
+
 }

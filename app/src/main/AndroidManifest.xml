@@ -9,6 +9,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- 百度地图定位服务 -->
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -17,16 +19,19 @@
                 <action android:name="com.baidu.location.service_v2.2"></action>
             </intent-filter>
         </service>
+
+        <!-- 百度地图api key -->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="0dy21aG1ZXioBjGD83l1ZXfxleQlKm6b" />  <!--http://lbsyun.baidu.com/apiconsole/key-->
-        <!-- 如果您key确认无误，却依然授权没有通过，请检查您的key的白名单配置 -->
+            android:value="5UhyUnzSIphc9KzSa7nGSVbH3nFRdFem" />
+        <!-- 腾讯地图api key -->
         <meta-data
             android:name="TencentMapSDK"
             android:value="2BDBZ-HTX3J-HI7FT-KU3EW-UX6RZ-7OBNX" />
+        <!-- 高得地图api key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1779f13b87614422047587f0888f9d8b" />
+            android:value="a82cea900bba8f2d0ab6804138fbd92a" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -35,11 +40,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.fan.map.demo.baidu.LocationActivity"></activity>
-        <activity android:name="com.fan.map.demo.baidu.LocationMark"></activity>
-        <activity android:name=".tecent.ShowMyLocationActivity" />
-        <activity android:name=".amap.CustomLocationActivity" />
-        <activity android:name=".amap.CustomLocation2DActivity" />
+        <activity android:name=".baidu.BmapLocationMark" />
+        <activity android:name=".tecent.Tmap2DActivity" />
+        <activity android:name=".tecent.Tmap3DActivity" />
+        <activity android:name=".amap.Amap3DActivity" />
+        <activity android:name=".amap.Amap2DActivity" />
+        <service android:name="com.amap.api.location.APSService"></service>
         <service android:name="com.fan.map.demo.gps.GPSService" />
     </application>
     <!-- 这个权限用于进行网络定位-->

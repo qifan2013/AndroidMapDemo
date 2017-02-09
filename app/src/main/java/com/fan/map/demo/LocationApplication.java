@@ -6,7 +6,7 @@ import android.app.Service;
 import android.os.Vibrator;
 
 import com.baidu.mapapi.SDKInitializer;
-import com.fan.map.demo.baidu.LocationService;
+import com.fan.map.demo.baidu.BmapLocationService;
 
 /**
  * 主Application，所有百度定位SDK的接口说明请参考线上文档：http://developer.baidu.com/map/loc_refer/index.html
@@ -16,7 +16,7 @@ import com.fan.map.demo.baidu.LocationService;
  * 直接拷贝com.baidu.location.service包到自己的工程下，简单配置即可获取定位结果，也可以根据demo内容自行封装
  */
 public class LocationApplication extends Application {
-	public LocationService locationService;
+	public BmapLocationService bmapLocationService;
     public Vibrator mVibrator;
     @Override
     public void onCreate() {
@@ -24,7 +24,7 @@ public class LocationApplication extends Application {
         /***
          * 初始化定位sdk，建议在Application中创建
          */
-        locationService = new LocationService(getApplicationContext());
+        bmapLocationService = new BmapLocationService(getApplicationContext());
         mVibrator =(Vibrator)getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
         SDKInitializer.initialize(getApplicationContext());
 

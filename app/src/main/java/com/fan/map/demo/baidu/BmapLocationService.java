@@ -12,7 +12,7 @@ import com.baidu.location.LocationClientOption.LocationMode;
  * @author baidu
  *
  */
-public class LocationService {
+public class BmapLocationService {
 	private LocationClient client = null;
 	private LocationClientOption mOption,DIYoption;
 	private Object  objLock = new Object();
@@ -21,7 +21,7 @@ public class LocationService {
 	 * 
 	 * @param locationContext
 	 */
-	public LocationService(Context locationContext){
+	public BmapLocationService(Context locationContext){
 		synchronized (objLock) {
 			if(client == null){
 				client = new LocationClient(locationContext);

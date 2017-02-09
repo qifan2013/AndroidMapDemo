@@ -20,13 +20,16 @@ import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.fan.map.demo.ImageUtils;
 import com.fan.map.demo.R;
 
 /**
  * AMapV2地图中介绍自定义定位小蓝点
  */
-public class CustomLocation2DActivity extends Activity implements LocationSource,
+public class Amap2DActivity extends Activity implements LocationSource,
 		AMapLocationListener {
 	private AMap aMap;
 	private MapView mapView;
@@ -34,7 +37,7 @@ public class CustomLocation2DActivity extends Activity implements LocationSource
 	private AMapLocationClient mlocationClient;
 	private AMapLocationClientOption mLocationOption;
 	private RadioGroup mGPSModeGroup;
-	
+
 	private TextView mLocationErrText;
 	private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
 	private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
@@ -43,7 +46,7 @@ public class CustomLocation2DActivity extends Activity implements LocationSource
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);// 不显示程序的标题栏
-		setContentView(R.layout.locationsource_activity);
+		setContentView(R.layout.activity_amap2d);
 		mapView = (MapView) findViewById(R.id.map);
 		mapView.onCreate(savedInstanceState);// 此方法必须重写
 		init();
@@ -138,6 +141,12 @@ public class CustomLocation2DActivity extends Activity implements LocationSource
 				mLocationErrText.setVisibility(View.GONE);
 				mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
 				aMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+				LatLng latLng = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude());
+				LatLng latLng1 = new LatLng(amapLocation.getLatitude()+0.001, amapLocation.getLongitude());
+				LatLng latLng2 = new LatLng(amapLocation.getLatitude(), amapLocation.getLongitude()+0.001);
+				aMap.addMarker(new MarkerOptions().position(latLng1).icon(BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar1)))));
+				aMap.addMarker(new MarkerOptions().position(latLng2).icon(BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar2)))));
+
 			} else {
 				String errText = "定位失败," + amapLocation.getErrorCode()+ ": " + amapLocation.getErrorInfo();
 				Log.e("AmapErr",errText);

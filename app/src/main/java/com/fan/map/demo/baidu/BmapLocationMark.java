@@ -1,15 +1,6 @@
 package com.fan.map.demo.baidu;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.fan.map.demo.ImageUtils;
 import com.fan.map.demo.LocationApplication;
 import com.fan.map.demo.R;
 import com.baidu.location.BDLocation;
@@ -40,29 +33,32 @@ import java.util.LinkedList;
  * 定位滤波demo，实际定位场景中，可能会存在很多的位置抖动，此示例展示了一种对定位结果进行的平滑优化处理
  * 实际测试下，该平滑策略在市区步行场景下，有明显平滑效果，有效减少了部分抖动，开放算法逻辑，希望能够对开发者提供帮助
  * 注意：该示例场景仅用于对定位结果优化处理的演示，里边相关的策略或算法并不一定适用于您的使用场景，请注意！！！
- * 
+ *
  * @author baidu
  * 
  */
-public class LocationMark extends Activity {
+public class BmapLocationMark extends Activity {
 	private MapView mMapView = null;
 	private BaiduMap mBaiduMap;
 	private Button reset;
-	private LocationService locService;
+	private LatLng locaPoint;
+	private BmapLocationService locService;
+	private ImageButton locaImagBtn;
 	private LinkedList<LocationEntity> locationList = new LinkedList<LocationEntity>(); // 存放历史定位结果的链表，最大存放当前结果的前5次定位结果
-	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.locationfilter);
+		setContentView(R.layout.activity_bmap);
 		mMapView = (MapView) findViewById(R.id.bmapView);
 		reset = (Button) findViewById(R.id.clear);
+		locaImagBtn= (ImageButton) findViewById(R.id.btn_show_location);
 		mBaiduMap = mMapView.getMap();
 		mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 		mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(15));
-		locService = ((LocationApplication) getApplication()).locationService;
+		locService = ((LocationApplication) getApplication()).bmapLocationService;
 		LocationClientOption mOption = locService.getDefaultLocationClientOption();
 		mOption.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
 		mOption.setCoorType("bd09ll");
@@ -102,7 +98,7 @@ public class LocationMark extends Activity {
 	 * 平滑策略代码实现方法，主要通过对新定位和历史定位结果进行速度评分，
 	 * 来判断新定位结果的抖动幅度，如果超过经验值，则判定为过大抖动，进行平滑处理,若速度过快，
 	 * 则推测有可能是由于运动速度本身造成的，则不进行低速平滑处理 ╭(●｀∀´●)╯
-	 * 
+	 *
 	 * @return Bundle
 	 */
 	private Bundle Algorithm(BDLocation location) {
@@ -115,7 +111,7 @@ public class LocationMark extends Activity {
 			locData.putInt("iscalculate", 0);
 			locationList.add(temp);
 		} else {
-			if (locationList.size() > 5)
+			if (locationList.size() > 2)
 				locationList.removeFirst();
 			double score = 0;
 			for (int i = 0; i < locationList.size(); ++i) {
@@ -176,9 +172,9 @@ public class LocationMark extends Activity {
 //					bitmap = BitmapDescriptorFactory.fromResource(R.drawable.avatar1);
 //					bitmap2 = BitmapDescriptorFactory.fromResource(R.drawable.avatar2);
 //					bitmap3 = BitmapDescriptorFactory.fromResource(R.drawable.avatar3);
-					bitmap = BitmapDescriptorFactory.fromBitmap(toRoundBitmap(getResources().getDrawable(R.drawable.avatar1)));
-					bitmap2 = BitmapDescriptorFactory.fromBitmap(toRoundBitmap(getResources().getDrawable(R.drawable.avatar2)));
-					bitmap3 = BitmapDescriptorFactory.fromBitmap(toRoundBitmap(getResources().getDrawable(R.drawable.avatar3)));
+					bitmap = BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.gps_point)));
+					bitmap2 = BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar2)));
+					bitmap3 = BitmapDescriptorFactory.fromBitmap(ImageUtils.toRoundBitmap(getResources().getDrawable(R.drawable.avatar3)));
 
 					// 构建MarkerOption，用于在地图上添加Marker
 					OverlayOptions option = new MarkerOptions().position(point).icon(bitmap);
@@ -188,7 +184,7 @@ public class LocationMark extends Activity {
 					mBaiduMap.addOverlay(new MarkerOptions().position(points.get(1)).icon(bitmap2));
 					mBaiduMap.addOverlay(new MarkerOptions().position(points.get(2)).icon(bitmap3));
 
-					mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(point));
+					locaPoint = point;
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -221,6 +217,16 @@ public class LocationMark extends Activity {
 					mBaiduMap.clear();
 			}
 		});
+		locaImagBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (mBaiduMap != null && locaPoint !=null)
+					mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(locaPoint));
+
+			}
+		});
 	}
 
 	@Override
@@ -242,65 +248,4 @@ public class LocationMark extends Activity {
 		long time;
 	}
 
-
-	public Bitmap toRoundBitmap(Drawable drawable)
-	{
-
-		int w = drawable.getIntrinsicWidth();
-		int h = drawable.getIntrinsicHeight();
-		Bitmap.Config config =drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-		Bitmap bitmap = Bitmap.createBitmap(w,h,config);
-		Canvas canvas1 = new Canvas(bitmap);// 建立对应bitmap的画布
-		drawable.setBounds(0, 0, w, h);
-		drawable.draw(canvas1);// 把drawable内容画到画布中
-		int width = bitmap.getWidth();
-		int height = bitmap.getHeight();
-		float roundPx;
-		float left,top,right,bottom,dst_left,dst_top,dst_right,dst_bottom;
-		if (width <= height) {
-			roundPx = width / 2 -5;
-			top = 0;
-			bottom = width;
-			left = 0;
-			right = width;
-			height = width;
-			dst_left = 0;
-			dst_top = 0;
-			dst_right = width;
-			dst_bottom = width;
-		} else {
-			roundPx = height / 2 -5;
-			float clip = (width - height) / 2;
-			left = clip;
-			right = width - clip;
-			top = 0;
-			bottom = height;
-			width = height;
-			dst_left = 0;
-			dst_top = 0;
-			dst_right = height;
-			dst_bottom = height;
-		}
-
-		Bitmap output = Bitmap.createBitmap(width,
-				height, Bitmap.Config.ARGB_8888);
-		Canvas canvas = new Canvas(output);
-
-		final int color = 0xff424242;
-		final Paint paint = new Paint();
-		final Rect src = new Rect((int)left, (int)top, (int)right, (int)bottom);
-		final Rect dst = new Rect((int)dst_left, (int)dst_top, (int)dst_right, (int)dst_bottom);
-		final RectF rectF = new RectF(dst_left+15, dst_top+15, dst_right-20, dst_bottom-20);
-
-		paint.setAntiAlias(true);
-
-		canvas.drawARGB(0, 0, 0, 0);
-		paint.setColor(color);
-
-		canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
-		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-		canvas.drawBitmap(bitmap, src, dst, paint);
-		return output;
-	}
 }

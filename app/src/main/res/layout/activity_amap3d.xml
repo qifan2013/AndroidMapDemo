@@ -19,7 +19,7 @@
         android:layout_marginLeft="10dp"
         android:background="#ff0000"
         android:textColor="#C0C0C0"
-        android:text="TextView" 
+        android:text="TextView"
         android:visibility="gone"/>
 
     <RadioGroup
